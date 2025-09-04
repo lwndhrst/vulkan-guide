@@ -40,27 +40,29 @@ constexpr unsigned int FRAME_OVERLAP = 2;
 class VulkanEngine {
 public:
 
-	bool _isInitialized{ false };
-	int _frameNumber {0};
-	bool stop_rendering{ false };
-	VkExtent2D _windowExtent{ 1700 , 900 };
+    bool _isInitialized{ false };
+    int _frameNumber {0};
+    bool stop_rendering{ false };
+    // VkExtent2D _windowExtent{ 1700 , 900 };
+    VkExtent2D _windowExtent{ 1920 , 1080 };
 
-	struct SDL_Window* _window{ nullptr };
+    struct SDL_Window* _window{ nullptr };
 
-	static VulkanEngine& Get();
+    static VulkanEngine& Get();
 
-	//initializes everything in the engine
-	void init();
+    //initializes everything in the engine
+    void init();
 
-	//shuts down the engine
-	void cleanup();
+    //shuts down the engine
+    void cleanup();
 
-	//draw loop
-	void draw();
+    //draw loop
+    void draw();
     void draw_background(VkCommandBuffer cmd);
+    void draw_imgui(VkCommandBuffer cmd, VkImageView targetImageView);
 
-	//run main loop
-	void run();
+    //run main loop
+    void run();
 
 
 
@@ -101,6 +103,12 @@ public:
     VkPipeline _gradientPipeline;
     VkPipelineLayout _gradientPipelineLayout;
 
+    // immediate submit structures
+    VkFence _immFence;
+    VkCommandBuffer _immCommandBuffer;
+    VkCommandPool _immCommandPool;
+    void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
+
 private:
 
     void init_vulkan();
@@ -115,4 +123,6 @@ private:
 
     void init_pipelines();
     void init_background_pipelines();
+
+    void init_imgui();
 };
