@@ -18,7 +18,9 @@
           pkg-config
 
           clang-tools
+          glsl_analyzer
 
+          glslang
           vulkan-headers
           vulkan-loader
           vulkan-memory-allocator
