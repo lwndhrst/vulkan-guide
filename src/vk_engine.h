@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "vk_loader.h"
 #include <vk_types.h>
 
 #include <vk_descriptors.h>
@@ -108,8 +109,9 @@ public:
     VmaAllocator _allocator;
 
     // draw resources
-    AllocatedImage _drawImage;
     VkExtent2D _drawExtent;
+    AllocatedImage _drawImage;
+    AllocatedImage _depthImage;
 
     DescriptorAllocator globalDescriptorAllocator;
 
@@ -137,6 +139,9 @@ public:
     VkPipeline _meshPipeline;
 
     GPUMeshBuffers rectangle;
+    GPUMeshBuffers uploadMesh(std::span<uint32_t> indices, std::span<Vertex> vertices);
+
+    std::vector<std::shared_ptr<MeshAsset>> testMeshes;
 
 private:
 
@@ -159,8 +164,6 @@ private:
 
     AllocatedBuffer create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memoryUsage);
     void destroy_buffer(const AllocatedBuffer& buffer);
-
-    GPUMeshBuffers uploadMesh(std::span<uint32_t> indices, std::span<Vertex> vertices);
 
     void init_default_data();
 };
