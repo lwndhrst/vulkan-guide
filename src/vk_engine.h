@@ -75,6 +75,7 @@ public:
     void draw();
     void draw_background(VkCommandBuffer cmd);
     void draw_imgui(VkCommandBuffer cmd, VkImageView targetImageView);
+    void draw_geometry(VkCommandBuffer cmd);
 
     //run main loop
     void run();
@@ -127,6 +128,11 @@ public:
     std::vector<ComputeEffect> backgroundEffects;
     int currentBackgroundEffect{0};
 
+
+
+    VkPipelineLayout _trianglePipelineLayout;
+    VkPipeline _trianglePipeline;
+
 private:
 
     void init_vulkan();
@@ -141,6 +147,7 @@ private:
 
     void init_pipelines();
     void init_background_pipelines();
+    void init_triange_pipeline();
 
     void init_imgui();
 };
