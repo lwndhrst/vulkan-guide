@@ -64,6 +64,8 @@ public:
 
     struct SDL_Window* _window{ nullptr };
 
+    bool resize_requested = false;
+
     static VulkanEngine& Get();
 
     //initializes everything in the engine
@@ -110,6 +112,8 @@ public:
 
     // draw resources
     VkExtent2D _drawExtent;
+    float renderScale = 1.0f;
+
     AllocatedImage _drawImage;
     AllocatedImage _depthImage;
 
@@ -150,6 +154,7 @@ private:
 
     void create_swapchain(uint32_t width, uint32_t height);
     void destroy_swapchain();
+    void resize_swapchain();
 
     void init_descriptors();
 
