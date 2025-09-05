@@ -118,30 +118,28 @@ public:
     VkDescriptorSet _drawImageDescriptors;
     VkDescriptorSetLayout _drawImageDescriptorLayout;
 
-    VkPipeline _gradientPipeline;
-    VkPipelineLayout _gradientPipelineLayout;
-
     // immediate submit structures
     VkFence _immFence;
     VkCommandBuffer _immCommandBuffer;
     VkCommandPool _immCommandPool;
     void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
 
+
+
+    VkPipeline _gradientPipeline;
+    VkPipelineLayout _gradientPipelineLayout;
+
     std::vector<ComputeEffect> backgroundEffects;
     int currentBackgroundEffect{0};
 
 
 
-    VkPipelineLayout _trianglePipelineLayout;
-    VkPipeline _trianglePipeline;
-
     VkPipelineLayout _meshPipelineLayout;
     VkPipeline _meshPipeline;
 
-    GPUMeshBuffers rectangle;
+    std::vector<std::shared_ptr<MeshAsset>> testMeshes;
     GPUMeshBuffers uploadMesh(std::span<uint32_t> indices, std::span<Vertex> vertices);
 
-    std::vector<std::shared_ptr<MeshAsset>> testMeshes;
 
 private:
 
@@ -157,7 +155,6 @@ private:
 
     void init_pipelines();
     void init_background_pipelines();
-    void init_triangle_pipeline();
     void init_mesh_pipeline();
 
     void init_imgui();
