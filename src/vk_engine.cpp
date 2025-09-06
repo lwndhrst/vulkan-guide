@@ -351,6 +351,16 @@ void VulkanEngine::run()
                 if (e.window.event == SDL_WINDOWEVENT_RESTORED) {
                     stop_rendering = false;
                 }
+
+                // needed for nicely handling window occlusion on wayland
+                // SDL3 should make this nicer
+                if (e.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
+                    stop_rendering = true;
+                }
+                if (e.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
+                    stop_rendering = false;
+                }
+
                 if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
                     resize_requested = true;
                 }
