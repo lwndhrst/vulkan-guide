@@ -26,16 +26,6 @@ struct DeletionQueue
     }
 };
 
-struct FrameData {
-    VkCommandPool _commandPool;
-    VkCommandBuffer _mainCommandBuffer;
-
-    VkSemaphore _swapchainSemaphore, _renderSemaphore;
-    VkFence _renderFence;
-
-    DeletionQueue _deletionQueue;
-};
-
 struct ComputePushConstants {
     glm::vec4 data1;
     glm::vec4 data2;
@@ -51,7 +41,27 @@ struct ComputeEffect {
     ComputePushConstants data;
 };
 
+struct FrameData {
+    VkCommandPool _commandPool;
+    VkCommandBuffer _mainCommandBuffer;
+
+    VkSemaphore _swapchainSemaphore, _renderSemaphore;
+    VkFence _renderFence;
+
+    DeletionQueue _deletionQueue;
+    DescriptorAllocatorGrowable _frameDescriptors;
+};
+
 constexpr unsigned int FRAME_OVERLAP = 2;
+
+struct GPUSceneData {
+    glm::mat4 view;
+    glm::mat4 proj;
+    glm::mat4 viewproj;
+    glm::vec4 ambientColor;
+    glm::vec4 sunlightDirection; // w for sun power
+    glm::vec4 sunlightColor;
+};
 
 class VulkanEngine {
 public:
@@ -143,6 +153,12 @@ public:
 
     std::vector<std::shared_ptr<MeshAsset>> testMeshes;
     GPUMeshBuffers uploadMesh(std::span<uint32_t> indices, std::span<Vertex> vertices);
+
+
+
+    GPUSceneData sceneData;
+    VkDescriptorSetLayout _gpuSceneDataDescriptorLayout;
+
 
 
 private:
