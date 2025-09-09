@@ -1,9 +1,5 @@
 {
-  inputs = {
-    # nixpkgs = {
-    #   url = "github:nixos/nixpkgs/nixos-unstable";
-    # };
-  };
+  inputs = { };
 
   outputs = { self, nixpkgs }:
     let
