@@ -161,6 +161,18 @@ public:
 
 
 
+    AllocatedImage _whiteImage;
+    AllocatedImage _blackImage;
+    AllocatedImage _greyImage;
+    AllocatedImage _errorCheckerboardImage;
+
+    VkSampler _defaultSamplerLinear;
+    VkSampler _defaultSamplerNearest;
+
+    VkDescriptorSetLayout _singleImageDescriptorLayout;
+
+
+
 private:
 
     void init_vulkan();
@@ -180,8 +192,12 @@ private:
 
     void init_imgui();
 
+    void init_default_data();
+
     AllocatedBuffer create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memoryUsage);
     void destroy_buffer(const AllocatedBuffer& buffer);
 
-    void init_default_data();
+    AllocatedImage create_image(VkExtent3D size, VkFormat format, VkImageUsageFlags usage, bool mipmapped = false);
+    AllocatedImage create_image(void* data, VkExtent3D size, VkFormat format, VkImageUsageFlags usage, bool mipmapped = false);
+    void destroy_image(const AllocatedImage& img);
 };
