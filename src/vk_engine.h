@@ -63,6 +63,64 @@ struct GPUSceneData {
     glm::vec4 sunlightColor;
 };
 
+
+
+struct GLTFMetallic_Roughness {
+    MaterialPipeline opaquePipeline;
+    MaterialPipeline transparentPipeline;
+
+    VkDescriptorSetLayout materialLayout;
+
+    struct MaterialConstants {
+        glm::vec4 colorFactors;
+        glm::vec4 metal_rough_factors;
+        //padding, we need it anyway for uniform buffers
+        glm::vec4 extra[14];
+    };
+
+    struct MaterialResources {
+        AllocatedImage colorImage;
+        VkSampler colorSampler;
+        AllocatedImage metalRoughImage;
+        VkSampler metalRoughSampler;
+        VkBuffer dataBuffer;
+        uint32_t dataBufferOffset;
+    };
+
+    DescriptorWriter writer;
+
+    void build_pipelines(VulkanEngine* engine);
+    void clear_resources(VkDevice device);
+
+    MaterialInstance write_material(VkDevice device, MaterialPass pass, const MaterialResources& resources, DescriptorAllocatorGrowable& descriptorAllocator);
+};
+
+
+
+struct MeshNode : public Node {
+    
+    std::shared_ptr<MeshAsset> mesh;
+
+    virtual void Draw(const glm::mat4& topMatrix, DrawContext& ctx) override;
+};
+
+struct RenderObject {
+    uint32_t indexCount;
+    uint32_t firstIndex;
+    VkBuffer indexBuffer;
+
+    MaterialInstance* material;
+
+    glm::mat4 transform;
+    VkDeviceAddress vertexBufferAddress;
+};
+
+struct DrawContext {
+    std::vector<RenderObject> OpaqueSurfaces;
+};
+
+
+
 class VulkanEngine {
 public:
 
@@ -127,7 +185,7 @@ public:
     AllocatedImage _drawImage;
     AllocatedImage _depthImage;
 
-    DescriptorAllocator globalDescriptorAllocator;
+    DescriptorAllocatorGrowable globalDescriptorAllocator;
 
     VkDescriptorSet _drawImageDescriptors;
     VkDescriptorSetLayout _drawImageDescriptorLayout;
@@ -170,6 +228,16 @@ public:
     VkSampler _defaultSamplerNearest;
 
     VkDescriptorSetLayout _singleImageDescriptorLayout;
+
+
+
+    MaterialInstance defaultData;
+    GLTFMetallic_Roughness metalRoughMaterial;
+
+    DrawContext mainDrawContext;
+    std::unordered_map<std::string, std::shared_ptr<Node>> loadedNodes;
+
+    void update_scene();
 
 
 

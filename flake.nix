@@ -14,6 +14,7 @@
           pkg-config
 
           clang-tools
+          gdb
           glsl_analyzer
 
           glslang
